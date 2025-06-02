@@ -1,73 +1,44 @@
 #include<stdio.h>
-#include<string.h>
-void infix_to_postfix(char infix[], char postfix[]);
-int F(char symbol); 
-int G(char symbol);
-int F(char symbol) 
+#define INF 999
+void dijkstra(int c[10][10],int n,int s, int d[10])
+{ 
+int v[10],min,u,i,j; 
+for(i=1;i<=n;i++)
+ { 
+d[i] = c[s][i];
+ v[i] = 0;
+} 
+v[s] = 1;
+for(i=1;i<=n;i++) 
+{ 
+min-INF; 
+for(j=1;j<=n;j++)
+ if(v[j]==0 && d[j]<min )
 {
- switch (symbol) 
- {
- case '+':
- case '-': return 2;
- case '*':
- case '/': return 4;
- case '$':
- case '^': return 5;
- case '(': return 0;
- case '#': return -1;
- default: return 8;
+min=d[j];
+ u = j;
+} 
+v[u] = 1;
+ for(j=1;j<=n;j++)
+ if(v[j]==0 && (d[u] + c[u][j]) < d[j] )
+ d[j] = d[u] + c[u][j];
  }
 }
-int G(char symbol) 
-{
- switch (symbol) 
+int main()
  {
- case '+':
- case '-': return 1;
- case '*':
- case '/': return 3;
- case '^': 
- case '$': return 6;
- case '(': return 9;
- case ')': return 0;
- case '#': return -1;
- default: return 7;
- }
+int c[10][10],d[10],i,j,s,sum,n;
+ printf("\nEnter n value:"); 
+scanf("%d",&n); 
+printf("\nEnter the graph data:\n");
+for(i=1;i<n;i++)
+for(j=1;j<n;j++)
+ scanf("%d",& c[i][j]);
+printf("\nEnter the source node:");
+scanf("%d", &s);
+dijkstra(c,n,s,d);
+printf("\nShortest distance from %dto%d is%d",s,i,d[i]);
+for(i=1;i<=n;i++)
+return 0;
 }
-void infix_to_postfix(char infix[], char postfix[]) 
-{
- int top, i, j = 0;
- char s[20];
- char symbol;
- top = -1;
- s[++top] = '#'; 
- for (i = 0; i<strlen(infix); i++) {
- symbol=infix[i];
- while (F(s[top]) > G(symbol)) 
- {
- postfix[j] = s[top--]; 
- j++;
-}
- if (F(s[top]) != G(symbol))
-{
- s[++top] = symbol; 
-}
- else
-{
- top--; 
-}
-}
- while (s[top] != '#') {
- postfix[j++] = s[top--];
-}
- postfix[j] = '\0'; 
-}
-int main() {
- char infix[20], postfix[20];
- printf("Enter an infix expression: ");
- scanf("%s", infix);
- infix_to_postfix(infix, postfix);
- printf("Postfix expression: %s\n", postfix);
- return 0; 
- 
-}
+
+
